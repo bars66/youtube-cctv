@@ -41,7 +41,7 @@ export class YoutubeAuthorizedApi {
         maxResults: 100,
         mine: true,
       });
-    console.log(JSON.stringify(res, null, 2));
+
     let apikey = res.data.items?.find(
       (item) => item?.snippet?.title === translationKeyName,
     );
@@ -197,10 +197,5 @@ export class YoutubeAuthorizedApi {
         await this.deleteBroadcast(broadcastId);
       }
     }
-
-    console.log(
-      "[YOUTUBE API][stopTranslationsWithCurrentStream]",
-      JSON.stringify(res, null, 2),
-    );
   }
 }
