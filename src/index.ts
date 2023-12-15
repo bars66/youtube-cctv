@@ -20,7 +20,7 @@ process.on("unhandledRejection", async (err) => {
   }
   process.exit();
 });
-const a = "";
+
 process.on("SIGINT", async () => {
   console.log("SIGINT catched");
   try {
