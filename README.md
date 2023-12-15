@@ -11,7 +11,7 @@ YouTube limits the number of broadcasts, maximum number of cameras:
 
 ## Install
 1. `npm install`
-2. `npm build`
+2. `npm run build`
 
 ## Getting a token to access youtube
 Full official instructions from Google: https://developers.google.com/youtube/v3/guides/auth/server-side-web-apps?hl=en#creatingclient

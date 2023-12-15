@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "typescript",
     "prettier": "prettier ./src/ --write",
     "prepare": "husky install"
   },
