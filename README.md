@@ -8,11 +8,10 @@ YouTube limits the number of broadcasts, maximum number of cameras:
 ## Requirements
 - onvif ip camera supporting H264 streaming
 - node 16
-- yarn
 
 ## Install
-1. `yarn install`
-2. `yarn build`
+1. `npm install`
+2. `npm build`
 
 ## Getting a token to access youtube
 Full official instructions from Google: https://developers.google.com/youtube/v3/guides/auth/server-side-web-apps?hl=en#creatingclient
