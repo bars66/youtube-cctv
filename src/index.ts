@@ -15,7 +15,9 @@ process.on("unhandledRejection", async (err) => {
   console.log("unhandledRejection", err);
   try {
     await youtubeBroadcast.stop();
-  } catch (e) {}
+  } catch (e) {
+    console.log("youtubeBroadcast.stop error", e);
+  }
   process.exit();
 });
 
@@ -23,6 +25,8 @@ process.on("SIGINT", async () => {
   console.log("SIGINT catched");
   try {
     await youtubeBroadcast.stop();
-  } catch (e) {}
+  } catch (e) {
+    console.log("youtubeBroadcast.stop error", e);
+  }
   process.exit();
 });
