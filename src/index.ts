@@ -10,7 +10,7 @@ const youtubeBroadcast = new YoutubeBroadcast(
   LIVE_TIME,
 );
 youtubeBroadcast.start().catch((e) => console.log("Start broadcast error", e));
-
+const a = '';
 process.on("unhandledRejection", async (err) => {
   console.log("unhandledRejection", err);
   try {
