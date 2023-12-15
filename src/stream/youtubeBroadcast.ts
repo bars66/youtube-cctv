@@ -1,6 +1,6 @@
-import { Ffmpeg } from "./ffmpeg";
-import { YoutubeAuthorizedApi } from "../api/youtube";
-import { getEnv } from "../utils/env";
+import {Ffmpeg} from "./ffmpeg";
+import {YoutubeAuthorizedApi} from "../api/youtube";
+import {getEnv} from "../utils/env";
 
 export class YoutubeBroadcast {
   ffmpeg: Ffmpeg;
@@ -17,10 +17,7 @@ export class YoutubeBroadcast {
     private liveTime: number | null,
   ) {
     this.ffmpeg = new Ffmpeg(this.cameraUrl);
-    this.youtubeApi = new YoutubeAuthorizedApi(
-      getEnv("YOUTUBE_ACCESS_TOKEN"),
-      getEnv("YOUTUBE_REFRESH_TOKEN"),
-    );
+    this.youtubeApi = new YoutubeAuthorizedApi(getEnv("YOUTUBE_ACCESS_TOKEN"), getEnv("YOUTUBE_REFRESH_TOKEN"));
   }
 
   private setWatcher(): void {
@@ -53,20 +50,13 @@ export class YoutubeBroadcast {
   async start(): Promise<void> {
     this.isRunned = true;
     console.log("Start broadcast");
-    const streamInfo = await this.youtubeApi.getStreamInfoByName(
-      this.translationKeyName,
-    );
+    const streamInfo = await this.youtubeApi.getStreamInfoByName(this.translationKeyName);
     await this.youtubeApi.clearCurrentStream(streamInfo);
 
-    const broadcastId = await this.youtubeApi.createBroadcast(
-      this.streamName,
-      this.type,
-    );
+    const broadcastId = await this.youtubeApi.createBroadcast(this.streamName, this.type);
     await this.youtubeApi.bindBroadcastToStream(broadcastId, streamInfo);
     this.ffmpeg.setOutputUrl(streamInfo.url);
-    console.log(
-      `Broadcast url: ${this.youtubeApi.getBroadcastLink(broadcastId)}`,
-    );
+    console.log(`Broadcast url: ${this.youtubeApi.getBroadcastLink(broadcastId)}`);
     this.broadcastId = broadcastId;
     this.ffmpeg.run();
 

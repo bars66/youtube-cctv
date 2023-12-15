@@ -1,6 +1,6 @@
 import readline from "readline";
-import { URL } from "url";
-import { getAuthClient } from "./utils/auth";
+import {URL} from "url";
+import {getAuthClient} from "./utils/auth";
 
 const SCOPES: Array<string> = [
   "https://www.googleapis.com/auth/youtube",
@@ -16,9 +16,7 @@ function getCodeFromUrlLine(): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     rl.question("Insert redirect url(http://localhost:8080/...):", (answer) => {
       rl.close();
-      const code = new URL(answer, "http://localhost/").searchParams.get(
-        "code",
-      );
+      const code = new URL(answer, "http://localhost/").searchParams.get("code");
       if (!code) {
         reject(`No code in url: ${answer}`);
         return;

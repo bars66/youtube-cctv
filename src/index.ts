@@ -1,5 +1,5 @@
-import { getEnv } from "./utils/env";
-import { YoutubeBroadcast } from "./stream/youtubeBroadcast";
+import {getEnv} from "./utils/env";
+import {YoutubeBroadcast} from "./stream/youtubeBroadcast";
 
 const LIVE_TIME = process.env.LIVE_TIME ? +process.env.LIVE_TIME : null;
 const youtubeBroadcast = new YoutubeBroadcast(

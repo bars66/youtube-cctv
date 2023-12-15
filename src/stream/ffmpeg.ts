@@ -1,6 +1,6 @@
-import { spawn, ChildProcessByStdio } from "child_process";
-import type { Writable, Readable } from "stream";
-import { delay } from "../utils/promises";
+import {spawn, ChildProcessByStdio} from "child_process";
+import type {Writable, Readable} from "stream";
+import {delay} from "../utils/promises";
 
 export class Ffmpeg {
   isRunned: boolean = false;
@@ -10,9 +10,7 @@ export class Ffmpeg {
   constructor(private cameraUrl: string) {}
 
   private log(str: string, anything?: unknown) {
-    const logStr = `[FFMPEG]${
-      this.ffmpeg ? `[pid=${this.ffmpeg.pid}]` : ""
-    }: ${str}`;
+    const logStr = `[FFMPEG]${this.ffmpeg ? `[pid=${this.ffmpeg.pid}]` : ""}: ${str}`;
     if (anything) {
       console.log(logStr, anything);
     }
