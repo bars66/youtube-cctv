@@ -1,6 +1,10 @@
 import {Ffmpeg} from "./ffmpeg";
 import {YoutubeAuthorizedApi} from "../api/youtube";
 import {getEnv} from "../utils/env";
+import {delay} from "../utils/promises";
+
+// Ютубу похоже нужно время для того, что бы стрим привязать к трансляции
+const RESTART_INTERVAL = 10000;
 
 export class YoutubeBroadcast {
   ffmpeg: Ffmpeg;
@@ -30,6 +34,7 @@ export class YoutubeBroadcast {
       console.log(`The broadcast will be recreated`);
       try {
         await this.stop();
+        await delay(RESTART_INTERVAL);
         await this.start();
       } catch (e) {
         console.log("Restart broadcast error", e);
