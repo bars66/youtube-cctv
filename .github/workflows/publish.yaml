@@ -34,8 +34,7 @@ jobs:
           branch: 'master'
           force_with_lease: true
           repository: bars66/youtube-cctv
-
-#      - uses: JS-DevTools/npm-publish@v3
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          registry: "https://npm.pkg.github.com"
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          registry: "https://npm.pkg.github.com"
