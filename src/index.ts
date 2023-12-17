@@ -9,11 +9,13 @@ const FN: {
   };
 } = {
   auth: {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     fn: () => require("./auth").main,
     desc: "Create YouTube account login keys",
     requiredEnvs: ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URL"],
   },
   stream: {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     fn: () => require("./stream").main,
     desc: "Start a youtube broadcast",
     requiredEnvs: [
@@ -25,13 +27,12 @@ const FN: {
     ],
   },
   version: {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     fn: () => require("./version").main,
     desc: "Print version",
     requiredEnvs: [],
   },
 };
-
-const REQUIRED_ENVS = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URL"];
 
 function run(): void {
   const cmd = process.argv[2];
