@@ -1,10 +1,22 @@
 {
   "name": "youtube-cctv-stream",
-  "version": "0.11.0",
-  "main": "index.js",
+  "version": "0.12.0",
+  "description": "Use youtube as a free buckup video surveillance server",
+  "keywords": [
+    "cctv",
+    "youtube",
+    "surveillance",
+    "camera",
+    "ipcamera"
+  ],
+  "main": "./build/index.js",
   "license": "WTFPL",
   "bin": {
     "youtube-cctv-stream": "./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bars66/youtube-cctv.git"
   },
   "scripts": {
     "build": "npx tsc",
@@ -37,13 +49,5 @@
   },
   "files": [
     "build/"
-  ],
-  "description": "Use youtube as a free buckup video surveillance server",
-  "keywords": [
-    "cctv",
-    "youtube",
-    "surveillance",
-    "camera",
-    "ipcamera"
   ]
 }
