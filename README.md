@@ -9,10 +9,21 @@ YouTube limits the number of broadcasts, maximum number of cameras:
 ## Requirements
 - ip camera supporting H264/H265 streaming
 - node 16
+- ffmpeg
 
 ## Install
-1. `npm install`
-2. `npm run build`
+1. [Install](https://nodejs.org/en/download/package-manager) node 16 or higher
+2. Install ffmpeg
+3. Install package `npm install -g youtube-cctv-stream`
+
+<details>
+  <summary>Install from source</summary>
+
+  1. `npm install`
+  2. `npm run build`
+  3. Use `npm start` to run
+
+</details>
 
 ## Getting a token to access youtube
 Full official instructions from Google: https://developers.google.com/youtube/v3/guides/auth/server-side-web-apps?hl=en#creatingclient
@@ -38,12 +49,12 @@ GOOGLE_CLIENT_ID=<...Client ID...>
 GOOGLE_CLIENT_SECRET=<... Client secret  ...>
 GOOGLE_REDIRECT_URL="http://localhost:8080"
 ```
-12. Run `npm start auth` to get an oauth2 token to access youtube
+12. Run `youtube-cctv-stream auth` to get an oauth2 token to access youtube
 
 ## Camera broadcast
 Run: 
 ```
-STREAM_NAME='CCTV 1' STREAM_KEY=cam1 CAMERA_RTSP_URL="rtsp://admin:password@192.168.1.1:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif" npm start stream
+STREAM_NAME='CCTV 1' STREAM_KEY=cam1 CAMERA_RTSP_URL="rtsp://admin:password@192.168.1.1:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif" youtube-cctv-stream stream
 ```
 Envs:
 - `STREAM_NAME` (required) - broadcast name
