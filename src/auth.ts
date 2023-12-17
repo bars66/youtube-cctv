@@ -48,4 +48,6 @@ async function auth() {
   console.log(`YOUTUBE_REFRESH_TOKEN=${token.tokens.refresh_token}`);
 }
 
-auth().catch((e) => console.log("Global error:", e));
+export async function main(): Promise<void> {
+  await auth();
+}

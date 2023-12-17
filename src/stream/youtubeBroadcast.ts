@@ -1,13 +1,15 @@
-import {Ffmpeg} from "./ffmpeg";
+import {getFfmpegStreamer} from "./ffmpeg/index";
 import {YoutubeAuthorizedApi} from "../api/youtube";
 import {getEnv} from "../utils/env";
 import {delay} from "../utils/promises";
+import {StreamIngestionProtocolType} from "../types/stream";
+import {FfmpegStreamer} from "./ffmpeg/ffmpegBase";
 
 // Ютубу похоже нужно время для того, что бы стрим привязать к трансляции
 const RESTART_INTERVAL = 10000;
 
 export class YoutubeBroadcast {
-  ffmpeg: Ffmpeg;
+  ffmpeg: FfmpegStreamer;
   youtubeApi: YoutubeAuthorizedApi;
   timeoutId: NodeJS.Timeout | null = null;
   isRunned: boolean = false;
@@ -18,9 +20,10 @@ export class YoutubeBroadcast {
     private translationKeyName: string,
     private cameraUrl: string,
     private type: "private" | "unlisted",
+    private streamerType: StreamIngestionProtocolType,
     private liveTime: number | null,
   ) {
-    this.ffmpeg = new Ffmpeg(this.cameraUrl);
+    this.ffmpeg = getFfmpegStreamer(streamerType, cameraUrl);
     this.youtubeApi = new YoutubeAuthorizedApi(getEnv("YOUTUBE_ACCESS_TOKEN"), getEnv("YOUTUBE_REFRESH_TOKEN"));
   }
 
@@ -55,7 +58,7 @@ export class YoutubeBroadcast {
   async start(): Promise<void> {
     this.isRunned = true;
     console.log("Start broadcast");
-    const streamInfo = await this.youtubeApi.getStreamInfoByName(this.translationKeyName);
+    const streamInfo = await this.youtubeApi.getStreamInfoByName(this.streamerType, this.translationKeyName);
     await this.youtubeApi.clearCurrentStream(streamInfo);
 
     const broadcastId = await this.youtubeApi.createBroadcast(this.streamName, this.type);

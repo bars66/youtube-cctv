@@ -1,32 +1,37 @@
-import {getEnv} from "./utils/env";
-import {YoutubeBroadcast} from "./stream/youtubeBroadcast";
+import {main as auth} from "./auth";
+import {main as stream} from "./stream";
 
-const LIVE_TIME = process.env.LIVE_TIME ? +process.env.LIVE_TIME : null;
-const youtubeBroadcast = new YoutubeBroadcast(
-  getEnv("STREAM_NAME"),
-  getEnv("STREAM_KEY"),
-  getEnv("CAMERA_RTSP_URL"),
-  "private",
-  LIVE_TIME,
-);
-youtubeBroadcast.start().catch((e) => console.log("Start broadcast error", e));
+const FN: {
+  [key: string]: {
+    fn: () => Promise<void>;
+    desc: string;
+  };
+} = {
+  auth: {
+    fn: auth,
+    desc: "Create YouTube account login keys",
+  },
+  stream: {
+    fn: stream,
+    desc: "Start a youtube broadcast",
+  },
+};
 
-process.on("unhandledRejection", async (err) => {
-  console.log("unhandledRejection", err);
-  try {
-    await youtubeBroadcast.stop();
-  } catch (e) {
-    console.log("youtubeBroadcast.stop error", e);
+function run(): void {
+  const cmd = process.argv[2];
+  const fn = FN[cmd];
+  if (!fn) {
+    console.log(
+      `Unknown cmd: ${cmd}\nAvailable:\n${Object.keys(FN)
+        .map((f) => `\t${f}: ${FN[f].desc}`)
+        .join("\n")}`,
+    );
+    process.exit(-1);
   }
-  process.exit();
-});
 
-process.on("SIGINT", async () => {
-  console.log("SIGINT catched");
-  try {
-    await youtubeBroadcast.stop();
-  } catch (e) {
-    console.log("youtubeBroadcast.stop error", e);
-  }
-  process.exit();
-});
+  fn.fn().catch((e) => {
+    console.error("Global error", e);
+  });
+}
+
+run();

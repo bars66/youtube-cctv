@@ -1,5 +1,6 @@
 import {getAuthClientByToken} from "../utils/auth";
 import {google, youtube_v3 as YoutubeTypes} from "googleapis";
+import {StreamIngestionProtocolType} from "../types/stream";
 
 const SHIFT = 60 * 1000;
 
@@ -11,7 +12,10 @@ export class YoutubeAuthorizedApi {
     this.oAuth2Client = getAuthClientByToken(refreshToken, accessToken);
   }
 
-  private async createStream(translationKeyName: string): Promise<YoutubeTypes.Schema$LiveStream> {
+  private async createStream(
+    streamerType: StreamIngestionProtocolType,
+    translationKeyName: string,
+  ): Promise<YoutubeTypes.Schema$LiveStream> {
     const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveStreams.insert({
       part: ["snippet,contentDetails,status,cdn"],
       requestBody: {
@@ -20,7 +24,7 @@ export class YoutubeAuthorizedApi {
         },
         cdn: {
           frameRate: "variable",
-          ingestionType: "rtmp",
+          ingestionType: streamerType,
           resolution: "variable",
         },
       },
@@ -29,7 +33,10 @@ export class YoutubeAuthorizedApi {
     return res.data;
   }
 
-  async getStreamInfoByName(translationKeyName: string): Promise<StreamInfo> {
+  async getStreamInfoByName(
+    streamerType: StreamIngestionProtocolType,
+    translationKeyName: string,
+  ): Promise<StreamInfo> {
     const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveStreams.list({
       part: ["snippet,contentDetails,status,cdn"],
       maxResults: 100,
@@ -37,9 +44,14 @@ export class YoutubeAuthorizedApi {
     });
 
     let apikey = res.data.items?.find((item) => item?.snippet?.title === translationKeyName);
+    if (apikey && apikey.cdn?.ingestionType !== streamerType) {
+      throw new Error(
+        `Ingest types are not equal. Existing ${apikey.cdn?.ingestionType}, ${streamerType} requested. Replace the STREAM_KEY name`,
+      );
+    }
 
     if (!apikey) {
-      apikey = await this.createStream(translationKeyName);
+      apikey = await this.createStream(streamerType, translationKeyName);
     }
 
     const streamId = apikey.id;
@@ -50,9 +62,23 @@ export class YoutubeAuthorizedApi {
       throw new Error("no stream api key");
     }
 
+    let streamUrl = "";
+    switch (streamerType) {
+      // для hls надо добавить в конец название плейлиста - stream.m3u8
+      case "hls":
+        streamUrl = url + "stream.m3u8";
+        break;
+      // для rtmp надо добавить api key в конец
+      case "rtmp":
+        streamUrl = url + "/" + streamApiKey;
+        break;
+      default:
+        throw new Error(`Unknown stream type: ${streamerType}`);
+    }
+
     return {
       id: streamId,
-      url: url + "/" + streamApiKey,
+      url: streamUrl,
     };
   }
 
