@@ -40,8 +40,9 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@googleapis/youtube": "^13.0.0",
     "dotenv": "^16.3.1",
-    "googleapis": "^129.0.0"
+    "google-auth-library": "^9.4.1"
   },
   "lint-staged": {
     "src/**/*": "prettier --write --ignore-unknown"
