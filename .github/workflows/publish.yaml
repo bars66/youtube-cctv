@@ -1,6 +1,12 @@
+name: Publish
+
 on:
   push:
     branches: master
+  workflow_run:
+    workflows: [ "Check PR" ]
+    types:
+      - completed
 
 jobs:
   publish:
@@ -14,12 +20,14 @@ jobs:
         with:
           node-version: '16.x'
       - run: npm ci
+      - name: Set git vars
+        run: |
+          git config --global user.name 'autopublish'
+          git config --global user.email 'example@example.com'
       - run: npm version minor
       - name: Commit report
         run: |
-         git config --global user.name 'Your Name'
-         git config --global user.email 'your-username@users.noreply.github.com'
-         git push
+          git push
 #      - uses: JS-DevTools/npm-publish@v3
 #        with:
 #          token: ${{ secrets.GITHUB_TOKEN }}
