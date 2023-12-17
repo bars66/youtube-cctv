@@ -1,4 +1,4 @@
-# A simple video surveillance script using youtube as a free video surveillance server
+# A simple script using youtube as a free video surveillance server
 - YouTube broadcast
 - Accessibility from anywhere in the world
 - Free video backup
@@ -7,7 +7,7 @@
 YouTube limits the number of broadcasts, maximum number of cameras:
 
 ## Requirements
-- onvif ip camera supporting H264 streaming
+- ip camera supporting H264/H265 streaming
 - node 16
 
 ## Install
@@ -38,10 +38,28 @@ GOOGLE_CLIENT_ID=<...Client ID...>
 GOOGLE_CLIENT_SECRET=<... Client secret  ...>
 GOOGLE_REDIRECT_URL="http://localhost:8080"
 ```
-12. Run `node build/auth.js` to get an oauth2 token to access youtube
+12. Run `npm start auth` to get an oauth2 token to access youtube
 
 ## Camera broadcast
-Run: `STREAM_NAME='CCTV 1' STREAM_KEY=cam1 CAMERA_RTSP_URL="rtsp://admin:password@192.168.1.1:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif" node build/index.js`
-- `STREAM_NAME` - broadcast name
-- `STREAM_KEY` - YouTube broadcast key, if it doesn't exist, it will be created at startup.
-- `CAMERA_RTSP_URL` - rtsp stream from camera
+Run: 
+```
+STREAM_NAME='CCTV 1' STREAM_KEY=cam1 CAMERA_RTSP_URL="rtsp://admin:password@192.168.1.1:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif" npm start stream
+```
+Envs:
+- `STREAM_NAME` (required) - broadcast name
+- `STREAM_KEY` (required) - YouTube broadcast key, if it doesn't exist, it will be created at startup.
+- `CAMERA_RTSP_URL` (required) - rtsp stream from camera
+- `STREAM_TYPE` - Ingestion type (see RTMP or HLS)
+  - `rtmp` (default)
+  - `hls`
+- `STREAM_PRIVACY_TYPE` - Broadcast privacy
+  - `private` (default) - access only for your account
+  - `unlisted` - available via link
+- `LIVE_TIME` - Time in milliseconds, number. By default, one stream is created and goes "forever". Rewind to 12 hours backwards is available. If you need an archive record, set `43140000` (11 hours and 59 minutes). Then every 12 hours a new stream will be created, and the previous one will be saved to your account 
+
+## RTMP or HLS
+- **rtmp** supports only H264, but has the lowest latency ~5s
+- **hls** supports H264 and H265, but the delay is up to ~20-30s.
+
+If your camera broadcasts video in H264, choose rtmp. 
+
