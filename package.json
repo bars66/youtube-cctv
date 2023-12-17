@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "WTFPL",
+  "bin": {
+    "youtube-cctv-stream": "./bin/index.js"
+  },
   "scripts": {
     "build": "npx tsc",
     "start": "node build/index.js",

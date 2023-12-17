@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import {main as auth} from "./auth";
 import {main as stream} from "./stream";
 
