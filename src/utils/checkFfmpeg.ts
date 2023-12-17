@@ -16,7 +16,7 @@ export async function checkFfmpeg(): Promise<void> {
     });
 
     sp.once("error", () => {
-      reject(new Error("Need ffmpeg to use"));
+      reject(new Error("Need ffmpeg for streaming"));
     });
 
     sp.once("close", () => {
