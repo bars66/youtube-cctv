@@ -1,8 +1,11 @@
 {
   "name": "youtube-cctv-stream",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "license": "WTFPL",
+  "bin": {
+    "youtube-cctv-stream": "./bin/index.js"
+  },
   "scripts": {
     "build": "npx tsc",
     "start": "node build/index.js",
@@ -10,7 +13,8 @@
     "lint": "npx eslint src",
     "lint:fix": "npx eslint --fix src",
     "prettier": "prettier ./src/ --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/node": "~16.11.68",
@@ -29,5 +33,6 @@
   },
   "lint-staged": {
     "src/**/*": "prettier --write --ignore-unknown"
-  }
+  },
+  "files": ["build/"]
 }
