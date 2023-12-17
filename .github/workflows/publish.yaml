@@ -27,6 +27,7 @@ jobs:
           git config --global user.name 'autopublish'
           git config --global user.email 'example@example.com'
       - run: npm version minor
+      - run: npm run build
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
