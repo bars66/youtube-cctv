@@ -1,5 +1,5 @@
 import {getAuthClientByToken} from "../utils/auth";
-import {google, youtube_v3 as YoutubeTypes} from "googleapis";
+import {youtube, youtube_v3 as YoutubeTypes} from "@googleapis/youtube";
 import {StreamIngestionProtocolType} from "../types/stream";
 
 const SHIFT = 60 * 1000;
@@ -16,7 +16,7 @@ export class YoutubeAuthorizedApi {
     streamerType: StreamIngestionProtocolType,
     translationKeyName: string,
   ): Promise<YoutubeTypes.Schema$LiveStream> {
-    const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveStreams.insert({
+    const res = await youtube({version: "v3", auth: this.oAuth2Client}).liveStreams.insert({
       part: ["snippet,contentDetails,status,cdn"],
       requestBody: {
         snippet: {
@@ -37,7 +37,7 @@ export class YoutubeAuthorizedApi {
     streamerType: StreamIngestionProtocolType,
     translationKeyName: string,
   ): Promise<StreamInfo> {
-    const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveStreams.list({
+    const res = await youtube({version: "v3", auth: this.oAuth2Client}).liveStreams.list({
       part: ["snippet,contentDetails,status,cdn"],
       maxResults: 100,
       mine: true,
@@ -83,7 +83,7 @@ export class YoutubeAuthorizedApi {
   }
 
   async createBroadcast(streamName: string, privacyType: "private" | "unlisted"): Promise<string> {
-    const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.insert({
+    const res = await youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.insert({
       part: ["snippet,contentDetails,status"],
       requestBody: {
         snippet: {
@@ -115,7 +115,7 @@ export class YoutubeAuthorizedApi {
   }
 
   async bindBroadcastToStream(broadcastId: string, streamInfo: StreamInfo) {
-    const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.bind({
+    const res = await youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.bind({
       part: ["snippet,contentDetails,status"],
       id: broadcastId,
       streamId: streamInfo.id,
@@ -133,7 +133,7 @@ export class YoutubeAuthorizedApi {
   }
 
   async stopBroadcast(broadcastId: string) {
-    const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.transition({
+    const res = await youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.transition({
       part: ["snippet,contentDetails,status"],
       id: broadcastId,
       broadcastStatus: "complete",
@@ -146,7 +146,7 @@ export class YoutubeAuthorizedApi {
   }
 
   private async deleteBroadcast(broadcastId: string) {
-    const res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.delete({
+    const res = await youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.delete({
       id: broadcastId,
     });
 
@@ -157,7 +157,7 @@ export class YoutubeAuthorizedApi {
   }
 
   async clearCurrentStream(streamInfo: StreamInfo) {
-    let res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.list({
+    let res = await youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.list({
       part: ["id,snippet,contentDetails,monetizationDetails,status"],
       maxResults: 100,
       broadcastStatus: "active",
@@ -174,7 +174,7 @@ export class YoutubeAuthorizedApi {
     }
 
     // Незапущенные удаляем
-    res = await google.youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.list({
+    res = await youtube({version: "v3", auth: this.oAuth2Client}).liveBroadcasts.list({
       part: ["id,snippet,contentDetails,monetizationDetails,status"],
       maxResults: 100,
       broadcastStatus: "upcoming",
