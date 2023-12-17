@@ -36,5 +36,7 @@
   },
   "files": [
     "build/"
-  ]
+  ],
+  "description": "Use youtube as a free buckup video surveillance server",
+  "keywords": ["cctv", "youtube", "surveillance", "camera", "ipcamera"]
 }
