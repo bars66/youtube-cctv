@@ -16,6 +16,8 @@ jobs:
       packages: write # allow GITHUB_TOKEN to publish packages
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
@@ -28,7 +30,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
           branch: ${{ github.ref }}
 
 #      - uses: JS-DevTools/npm-publish@v3
