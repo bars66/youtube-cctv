@@ -1,20 +1,36 @@
 #!/usr/bin/env node
-import {main as auth} from "./auth";
-import {main as stream} from "./stream";
+import "dotenv/config";
 
 const FN: {
   [key: string]: {
-    fn: () => Promise<void>;
+    fn: () => () => Promise<void>;
     desc: string;
+    requiredEnvs: Array<string>;
   };
 } = {
   auth: {
-    fn: auth,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    fn: () => require("./auth").main,
     desc: "Create YouTube account login keys",
+    requiredEnvs: ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URL"],
   },
   stream: {
-    fn: stream,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    fn: () => require("./stream").main,
     desc: "Start a youtube broadcast",
+    requiredEnvs: [
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "GOOGLE_REDIRECT_URL",
+      "YOUTUBE_ACCESS_TOKEN",
+      "YOUTUBE_REFRESH_TOKEN",
+    ],
+  },
+  version: {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    fn: () => require("./version").main,
+    desc: "Print version",
+    requiredEnvs: [],
   },
 };
 
@@ -30,7 +46,16 @@ function run(): void {
     process.exit(-1);
   }
 
-  fn.fn().catch((e) => {
+  for (const env of fn.requiredEnvs) {
+    if (!process.env[env]) {
+      console.log(
+        `No env: ${env}. Read the readme https://github.com/bars66/youtube-cctv/blob/master/README.md before using to create required envs.`,
+      );
+      process.exit(-1);
+    }
+  }
+
+  fn.fn()().catch((e) => {
     console.error("Global error", e);
   });
 }
