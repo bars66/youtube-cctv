@@ -2,7 +2,6 @@ import {getEnv} from "./utils/env";
 import {YoutubeBroadcast} from "./stream/youtubeBroadcast";
 import {StreamIngestionProtocolType, StreamType} from "./types/stream";
 
-const LIVE_TIME = process.env.LIVE_TIME ? +process.env.LIVE_TIME : null;
 let youtubeBroadcast: YoutubeBroadcast | null;
 
 const STREAM_PRIVACY_TYPE_VALUES: Array<StreamType> = ["private", "unlisted"];
