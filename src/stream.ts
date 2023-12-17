@@ -42,6 +42,8 @@ function getArgs(): {
   };
 }
 
+export const REQUIRED_ENVS = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URL"];
+
 export async function main(): Promise<void> {
   const {streamName, streamKey, cameraRtspUrl, streamPrivacyType, streamType, liveTime} = getArgs();
   youtubeBroadcast = new YoutubeBroadcast(
