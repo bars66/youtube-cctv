@@ -1,6 +1,6 @@
 {
   "name": "youtube-cctv-stream",
-  "version": "0.1.0",
+  "version": "0.16.0",
   "main": "index.js",
   "license": "WTFPL",
   "bin": {
@@ -34,5 +34,7 @@
   "lint-staged": {
     "src/**/*": "prettier --write --ignore-unknown"
   },
-  "files": ["build/"]
+  "files": [
+    "build/"
+  ]
 }
